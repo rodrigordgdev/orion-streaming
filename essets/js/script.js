@@ -7,6 +7,7 @@ let progressosUsuario = [];
 let itensAtuais = [];
 let idioma = localStorage.getItem("orion_idioma") || "pt";
 let tokenAtual = localStorage.getItem("orion_token") || "";
+let intervaloProgresso = null;
 
 let textos = {
   pt: {
@@ -229,6 +230,7 @@ let modal = document.getElementById("modal-detalhes");
 
 function fecharModal() {
   modal.classList.add("escondida");
+  clearInterval(intervaloProgresso);   // <-- para o salvamento ao fechar
   let video = document.getElementById("player");
   if (video) {
     video.pause();
@@ -478,6 +480,7 @@ async function abrirDetalhes(item) {
 // --- TOCA O VÍDEO (player HLS) com "continuar assistindo" ---
 async function tocarVideo(titulo, filmeId, capa) {
   jaRemovido = false; 
+  clearInterval(intervaloProgresso);
   let corpo = document.querySelector(".modal-corpo");
   corpo.innerHTML = `
     <video id="player" class="player" controls autoplay></video>
@@ -491,9 +494,7 @@ async function tocarVideo(titulo, filmeId, capa) {
   let urlStream = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
   conectarHLS(video, urlStream);
 
-  // 1. BUSCA onde o usuário parou
-  let resposta = await fetch(servidorURL + "/progresso?email=" + usuarioLogado + "&filme_id=" + filmeId);
-  let dados = await resposta.json();
+  let dados = await buscarGET("/progresso?filme_id=" + filmeId);
 
   // 2. quando o vídeo estiver pronto, PULA pro segundo salvo
   video.addEventListener("loadedmetadata", function () {
@@ -503,7 +504,7 @@ async function tocarVideo(titulo, filmeId, capa) {
   });
 
   // 3. a cada 5 segundos, SALVA onde está
-  setInterval(function () {
+  intervaloProgresso = setInterval(function () {
     if (!video.paused) {
       enviarPOST("/progresso", {
         usuario: usuarioLogado,
@@ -642,10 +643,9 @@ async function mostrarFavoritos(tipo) {
     let fav = favoritos[i];
     let capa = fav.capa ? fav.capa : semCapa;
     cardsHTML += `
-      <div class="card card-fav">
+      <div class="card card-fav" data-fid="${fav.filme_id}" data-titulo="${fav.titulo}" data-capa="${fav.capa}">
         <button class="botao-remover" data-id="${fav.id}" title="Remover dos favoritos">✕</button>
-        <img src="${capa}" onerror="this.src='${semCapa}'">
-        <p>${fav.titulo}</p>
+        ${mioloCard(capa, fav.titulo)}
       </div>
     `;
   }
@@ -659,9 +659,22 @@ async function mostrarFavoritos(tipo) {
   // liga o clique em cada botão de remover
   let botoes = area.querySelectorAll(".botao-remover");
   for (let i = 0; i < botoes.length; i++) {
-    botoes[i].addEventListener("click", function () {
+    botoes[i].addEventListener("click", function (evento) {
+      evento.stopPropagation();   // <-- impede o clique de "subir" pro card
       let id = botoes[i].dataset.id;
       desfavoritar(id, tipo);
+    });
+  }
+
+  // clicar no card toca o vídeo
+  let cardsFav = area.querySelectorAll(".card-fav");
+  for (let i = 0; i < cardsFav.length; i++) {
+    cardsFav[i].addEventListener("click", function () {
+      let fid = Number(cardsFav[i].dataset.fid);
+      let tit = cardsFav[i].dataset.titulo;
+      let cap = cardsFav[i].dataset.capa;
+      modal.classList.remove("escondida");
+      tocarVideo(tit, fid, cap);
     });
   }
 }
@@ -810,8 +823,10 @@ async function buscarConteudo(tipo, texto) {
 async function removerProgresso(filmeId) {
   if (jaRemovido) return;
   jaRemovido = true;
+  clearInterval(intervaloProgresso);   // <-- para de salvar!
   await enviarPOST("/remover-progresso", { usuario: usuarioLogado, filme_id: filmeId });
 }
+
 // --- BUSCA DE CANAIS (filtra a lista local, sem internet) ---
 let campoBuscaCanais = document.getElementById("busca-canais");
 let tempoBuscaCanais;

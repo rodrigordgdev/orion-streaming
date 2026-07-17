@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meu App de Streaming</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- 1. TELA DE LOGIN / CADASTRO -->
+    <div id="tela-login" class="tela">
+      <!-- FORM DE LOGIN -->
+      <div class="caixa-login" id="form-login">
+        <img
+          src="img/Design_sem_nome__6_-removebg-preview.png"
+          alt="Orion"
+          class="logo-selecao"
+        />
+        <input
+          type="email"
+          id="email"
+          data-i18n-ph="email_ph"
+          placeholder="Seu e-mail"
+        />
+        <input
+          type="password"
+          id="senha"
+          data-i18n-ph="senha_ph"
+          placeholder="Sua senha"
+        />
+        <button id="botao-entrar" data-i18n="entrar">Entrar</button>
+        <p id="aviso"></p>
+        <p class="alternar">
+          Não tem conta?
+          <span id="ir-cadastro" class="link" data-i18n="criar_conta"
+            >Criar conta</span
+          >
+        </p>
+      </div>
+
+      <!-- FORM DE CADASTRO -->
+      <div class="caixa-login escondida" id="form-cadastro">
+        <img
+          src="img/Design_sem_nome__6_-removebg-preview.png"
+          alt="Orion"
+          class="logo-selecao"
+        />
+        <input
+          type="email"
+          id="email-cadastro"
+          data-i18n-ph="email_ph"
+          placeholder="Seu e-mail"
+        />
+        <input
+          type="password"
+          id="senha-cadastro"
+          data-i18n-ph="senha_ph"
+          placeholder="Sua senha"
+        />
+        <button id="botao-cadastrar" data-i18n="cadastrar">Cadastrar</button>
+        <p id="aviso-cadastro"></p>
+        <p class="alternar">
+          Já tem conta?
+          <span id="ir-login" class="link" data-i18n="entrar">Entrar</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- 2. TELA DE SELEÇÃO -->
+    <div id="tela-selecao" class="tela escondida">
+      <img
+        src="img/Design_sem_nome__6_-removebg-preview.png"
+        alt="Orion"
+        class="logo-selecao-2"
+      />
+      <div class="blocos">
+        <div class="bloco" data-destino="tela-filmes">
+          <span class="bloco-icone">🎬</span>
+          <span class="bloco-nome" data-i18n="filmes">Filmes</span>
+        </div>
+        <div class="bloco" data-destino="tela-series">
+          <span class="bloco-icone">📺</span>
+          <span class="bloco-nome" data-i18n="series">Séries</span>
+        </div>
+        <div class="bloco" data-destino="tela-canais">
+          <span class="bloco-icone">📡</span>
+          <span class="bloco-nome" data-i18n="canais">Canais</span>
+        </div>
+        <div class="bloco" data-destino="tela-ajustes">
+          <span class="bloco-icone">🎛️</span>
+          <span class="bloco-nome" data-i18n="ajustes">Ajustes</span>
+        </div>
+      </div>
+      <button id="botao-sair" class="botao-sair">Sair</button>
+    </div>
+
+    <!-- 3. TELA DE FILMES -->
+    <div id="tela-filmes" class="tela escondida">
+      <div class="barra-topo">
+        <button
+          class="botao-voltar"
+          data-voltar="tela-selecao"
+          data-i18n="voltar"
+        >
+          ◀ Voltar
+        </button>
+        <span class="barra-titulo" data-i18n="filmes">Filmes</span>
+        <span class="relogio"></span>
+        <input
+          type="text"
+          id="busca-filmes"
+          class="campo-busca"
+          data-i18n-ph="buscar_filme"
+          placeholder="🔍 Buscar filme..."
+        />
+      </div>
+      <div class="layout-filmes">
+        <aside id="menu-categorias" class="menu-lateral"></aside>
+        <div id="lista-filmes" class="conteudo-filmes"></div>
+      </div>
+    </div>
+
+    <!-- TELA DE SÉRIES -->
+    <div id="tela-series" class="tela escondida">
+      <div class="barra-topo">
+        <button
+          class="botao-voltar"
+          data-voltar="tela-selecao"
+          data-i18n="voltar"
+        >
+          ◀ Voltar
+        </button>
+        <span class="barra-titulo" data-i18n="series">Séries</span>
+        <span class="relogio"></span>
+        <input
+          type="text"
+          id="busca-series"
+          class="campo-busca"
+          data-i18n-ph="buscar_serie"
+          placeholder="🔍 Buscar série..."
+        />
+      </div>
+      <div class="layout-filmes">
+        <aside id="menu-series" class="menu-lateral"></aside>
+        <div id="lista-series" class="conteudo-filmes"></div>
+      </div>
+    </div>
+    <!-- TELA DE CANAIS -->
+    <div id="tela-canais" class="tela escondida">
+      <div class="barra-topo">
+        <button
+          class="botao-voltar"
+          data-voltar="tela-selecao"
+          data-i18n="voltar"
+        >
+          ◀ Voltar
+        </button>
+        <span class="barra-titulo" data-i18n="canais">Canais</span>
+        <span class="relogio"></span>
+        <input
+          type="text"
+          id="busca-canais"
+          class="campo-busca"
+          data-i18n-ph="buscar_canal"
+          placeholder="🔍 Buscar canal..."
+        />
+      </div>
+      <div class="layout-filmes">
+        <aside id="menu-canais" class="menu-lateral"></aside>
+        <div id="lista-canais" class="conteudo-filmes"></div>
+      </div>
+    </div>
+    <!-- TELA DE AJUSTES -->
+    <div id="tela-ajustes" class="tela escondida">
+      <div class="barra-topo">
+        <button class="botao-voltar" data-voltar="tela-selecao">
+          ◀ Voltar
+        </button>
+        <span class="barra-titulo">Ajustes</span>
+      </div>
+      <div class="ajustes-conteudo">
+        <div class="ajuste-item">
+          <span class="ajuste-label"
+            >Conta<br /><span id="email-logado" class="email-logado"></span
+          ></span>
+          <button id="sair-ajustes" class="botao-sair-ajustes">Sair</button>
+        </div>
+        <div class="ajuste-item">
+          <span class="ajuste-label" data-i18n="formato_hora"
+            >Formato de hora</span
+          >
+          <div class="ajuste-opcoes">
+            <button class="btn-formato" data-formato="24">24h</button>
+            <button class="btn-formato" data-formato="12">12h</button>
+          </div>
+        </div>
+        <div class="ajuste-item">
+          <span class="ajuste-label" data-i18n="avalie">Avalie o Orion</span>
+          <div class="estrelas" id="estrelas">
+            <span class="estrela" data-valor="1">★</span>
+            <span class="estrela" data-valor="2">★</span>
+            <span class="estrela" data-valor="3">★</span>
+            <span class="estrela" data-valor="4">★</span>
+            <span class="estrela" data-valor="5">★</span>
+          </div>
+        </div>
+
+        <p id="aviso-avaliacao" class="aviso-avaliacao"></p>
+        <div class="ajuste-item">
+          <span class="ajuste-label" data-i18n="idioma">Idioma</span>
+          <div class="ajuste-opcoes">
+            <button class="btn-idioma" data-idioma="pt">🇧🇷 PT</button>
+            <button class="btn-idioma" data-idioma="en">🇺🇸 EN</button>
+          </div>
+        </div>
+        <div class="ajuste-item">
+          <span class="ajuste-label">Controle dos pais</span>
+          <div class="ajuste-opcoes">
+            <input
+              type="password"
+              id="campo-pin"
+              class="campo-pin"
+              maxlength="4"
+              inputmode="numeric"
+              placeholder="••••"
+            />
+            <button id="btn-salvar-pin" class="btn-pin">Salvar PIN</button>
+          </div>
+        </div>
+        <p id="aviso-pin" class="aviso-avaliacao"></p>
+        <div class="ajuste-item">
+          <span class="ajuste-label">Modo protegido</span>
+          <label class="switch">
+            <input type="checkbox" id="check-protegido" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL DE DETALHES DO FILME -->
+    <div id="modal-detalhes" class="modal escondida">
+      <div class="modal-conteudo">
+        <button id="fechar-modal" class="fechar-modal">✕</button>
+        <div class="modal-corpo"></div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
